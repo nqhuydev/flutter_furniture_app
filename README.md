@@ -2,6 +2,10 @@
 
 A new Flutter application.
 
+## Screenshot
+
+![image](https://raw.githubusercontent.com/nqhuydev/flutter_furniture_app/master/screenshot.png)
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
