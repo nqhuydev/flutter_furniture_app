@@ -20,11 +20,25 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
+  TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = new TabController(length: 4, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
+      body: new ListView(
         children: <Widget>[
           Column(
             children: <Widget>[
@@ -39,7 +53,7 @@ class _HomePageState extends State<HomePage> {
 
                   //Hình tròn bóng mờ theo vị trí
                   new Positioned(
-                    bottom: 50,
+                    bottom: 100,
                     right: 100,
                     child: Container(
                       height: 400,
@@ -51,7 +65,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   new Positioned(
-                    bottom: 100,
+                    bottom: 150,
                     left: 150,
                     child: Container(
                       height: 300,
@@ -81,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(25),
                                     image: DecorationImage(
-                                      image: AssetImage('assets/chris.jpg'),
+                                      image: AssetImage('assets/huy.jpg'),
                                     ),
                                     border: Border.all(
                                         color: Colors.white, width: 2)),
@@ -175,11 +189,28 @@ class _HomePageState extends State<HomePage> {
               SizedBox(height: 10),
 
               // Item
-              _itemCard('FinnVanian', 'assets/ottoman.jpg', true),
-              _itemCard('FinnVanian', 'assets/ottoman.jpg', false),
+              _itemCard('Ghế sofa', 'assets/ottoman.jpg', true),
+              _itemCard('Ghế tựa', 'assets/anotherchair.jpg', false),
+              _itemCard('Ghế đệm', 'assets/chair.jpg', true),
+              _itemCard('Ghế tựa', 'assets/anotherchair.jpg', false),
+              _itemCard('Ghế sofa', 'assets/ottoman.jpg', false),
+              _itemCard('Ghế đệm', 'assets/chair.jpg', true),
             ],
           )
         ],
+      ),
+      bottomNavigationBar: new Material(
+        color: Colors.white,
+        child: TabBar(
+          indicatorColor: Colors.yellow,
+          tabs: [
+            Tab(icon: Icon(Icons.event_seat, color: Colors.yellow)),
+            Tab(icon: Icon(Icons.timer, color: Colors.grey)),
+            Tab(icon: Icon(Icons.shopping_cart, color: Colors.grey)),
+            Tab(icon: Icon(Icons.person_outline, color: Colors.grey))
+          ],
+          controller: _tabController,
+        ),
       ),
     );
   }
@@ -212,109 +243,111 @@ class _HomePageState extends State<HomePage> {
           child: Container(
             width: double.infinity,
             child: new Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Container(
-                  height: 150,
-                  width: 140,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage(image), fit: BoxFit.cover),
+                Expanded(
+                  child: Container(
+                    height: 150,
+                    width: 150,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage(image), fit: BoxFit.cover),
+                    ),
                   ),
+                  flex: 4,
                 ),
-                SizedBox(width: 4.0),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        width: 220,
-                        child: Row(
-                          children: <Widget>[
-                            Text(
-                              name,
-                              style: TextStyle(
-                                  fontFamily: 'Quicksand',
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Expanded(
-                              child: SizedBox(),
-                            ),
-                            Material(
-                              elevation: isFavorite ? 0 : 2,
-                              borderRadius: BorderRadius.circular(20),
-                              child: Container(
-                                height: 40,
-                                width: 40,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: isFavorite
-                                      ? Colors.grey.withOpacity(0.2)
-                                      : Colors.white,
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 5),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Text(
+                                  name,
+                                  style: TextStyle(
+                                      fontFamily: 'Quicksand',
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold),
                                 ),
+                              ),
+                              Material(
+                                elevation: isFavorite ? 0 : 2,
+                                borderRadius: BorderRadius.circular(20),
+                                child: Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: isFavorite
+                                        ? Colors.grey.withOpacity(0.2)
+                                        : Colors.white,
+                                  ),
+                                  child: Center(
+                                    child: isFavorite
+                                        ? Icon(Icons.favorite_border)
+                                        : Icon(
+                                            Icons.favorite,
+                                            color: Colors.red,
+                                          ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        Container(
+                            width: 175,
+                            child: Text(
+                                'Scandinavian small sized double sofa imported full leather / Dale Italia oil wax leather black',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontFamily: 'Quicksand',
+                                    color: Colors.grey,
+                                    fontSize: 12))),
+                        SizedBox(height: 5.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            Container(
+                              height: 40,
+                              color: Color(0xFFF9C335),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
                                 child: Center(
-                                  child: isFavorite
-                                      ? Icon(Icons.favorite_border)
-                                      : Icon(
-                                          Icons.favorite,
-                                          color: Colors.red,
-                                        ),
+                                  child: Text('\$248',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: 'Quicksand',
+                                          fontWeight: FontWeight.bold)),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: 40.0,
+                              width: 100.0,
+                              color: Color(0xFFFEDD59),
+                              child: Center(
+                                child: Text(
+                                  'Add to cart',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Quicksand',
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                             )
                           ],
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      Container(
-                          width: 175,
-                          child: Text(
-                              'Scandinavian small sized double sofa imported full leather / Dale Italia oil wax leather black',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  fontFamily: 'Quicksand',
-                                  color: Colors.grey,
-                                  fontSize: 12))),
-                      SizedBox(height: 5.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          SizedBox(width: 35.0),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 5, bottom: 5),
-                            child: Container(
-                              height: 40,
-                              width: 50,
-                              color: Color(0xFFF9C335),
-                              child: Center(
-                                child: Text('\$248',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: 'Quicksand',
-                                        fontWeight: FontWeight.bold)),
-                              ),
-                            ),
-                          ),
-
-                          Container(
-                            height: 40.0,
-                            width: 100.0,
-                            color: Color(0xFFFEDD59),
-                            child: Center(
-                              child: Text(
-                                'Add to cart',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'Quicksand',
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          )
-                        ],
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   ),
+                  flex: 6,
                 )
               ],
             ),
